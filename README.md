@@ -75,7 +75,7 @@ Run the SQL statements provided in `Backend/src/config/sql.txt` against that dat
 - `conversations`
 - `messages`
 
-### ### 4. Start the backend
+### 4. Start the backend
 
 From the `Backend` directory, run:
 
