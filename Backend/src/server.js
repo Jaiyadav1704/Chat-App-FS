@@ -36,8 +36,10 @@ io.on("connection",(socket) => {
     })
 });
 
-const PORT = process.env.PORT || 3000;
+if (!process.env.VERCEL) {
+    const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => {
-    console.log(`Server running at ${PORT}`);
-})
+    server.listen(PORT, () => {
+        console.log(`Server running at ${PORT}`);
+    });
+}
