@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 dotenv.config()
-import { Socket } from "dgram";
+
 import app from "./app.js";
 import http from "http"
 import {Server} from "socket.io"
@@ -36,7 +36,7 @@ io.on("connection",(socket) => {
     })
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
     console.log(`Server running at ${PORT}`);
