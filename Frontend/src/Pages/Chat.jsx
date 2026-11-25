@@ -103,24 +103,35 @@ function Chat() {
     }, []);
 
     useEffect(() => {
-        socket.emit("join", currentUser.id)
-        console.log("Joining room:", currentUser.id)
+        const join = () => socket.emit("join", currentUser.id);
+
+        if(socket.connected) join();
+        socket.on("connect", join);
+
+        return () => {
+            socket.off("connect", join);
+        };
     },[])
 
     useEffect(() => {
-        const handleReceiveMessage = (data) => {
-            console.log("receiveMessage fired", data);
-            console.log("Current conversation:", conversation);
-
-            if(conversation && conversation.id === data.conversationId){
-                fetchMessages(data.conversationId)
+            const handleReceiveMessage = (data) => {
+                if(conversation && conversation.id === data.conversationId){
+                    fetchMessages(data.conversationId)
+                }
             }
-        }
-        socket.on("receiveMessage", handleReceiveMessage)
-        return () => {
-            socket.off("receiveMessage", handleReceiveMessage)
-        }
-    },[conversation])
+            socket.on("receiveMessage", handleReceiveMessage)
+            return () => {
+                socket.off("receiveMessage", handleReceiveMessage)
+            }
+        },[conversation])
+
+        // Fallback: refresh the open conversation every 5s in case a socket event is missed
+        useEffect(() => {
+            if(!conversation) return;
+
+            const interval = setInterval(() => fetchMessages(conversation.id), 5000);
+            return () => clearInterval(interval);
+        },[conversation])
 
 
     return(
