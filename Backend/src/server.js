@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
 dotenv.config()
 
-import app from "./app.js";
+import app from "./expressapp.js";
 import http from "http"
 import {Server} from "socket.io"
 
@@ -43,3 +43,5 @@ if (!process.env.VERCEL) {
         console.log(`Server running at ${PORT}`);
     });
 }
+
+export default server;
