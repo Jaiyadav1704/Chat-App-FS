@@ -89,7 +89,18 @@ function Chat() {
 
     useEffect(() => {
         fetchUsers();
-    },[])
+
+        const interval = setInterval(fetchUsers, 20000);
+
+        const onFocus = () => fetchUsers();
+
+        window.addEventListener("focus", onFocus);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener("focus", onFocus);
+        };
+    }, []);
 
     useEffect(() => {
         socket.emit("join", currentUser.id)
